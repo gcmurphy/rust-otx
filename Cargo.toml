@@ -2,6 +2,8 @@
 name = "otx"
 version = "0.1.0"
 authors = ["Grant Murphy <grantcmurphy@gmail.com>"]
+license = "MPL-2.0"
+keywords = ["otx", "threat", "exchange", "alienvault"]
 
 [dependencies]
 time = "0.1"
