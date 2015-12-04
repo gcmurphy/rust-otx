@@ -229,7 +229,7 @@ mod test {
         let mut otx = Client::new();
         let otx = otx.apikey(key).limit(2);
         let mut count = 5;
-        otx.each(move|t|{ count -= 1; count > 0 });
-        assert!(count == 1);
+        otx.each(|_|{ count -= 1; count > 0 });
+        assert!(count == 0);
     }
 }
