@@ -1,0 +1,11 @@
+[package]
+name = "otx"
+version = "0.1.0"
+authors = ["Grant Murphy <grantcmurphy@gmail.com>"]
+
+[dependencies]
+time = "0.1"
+hyper = "*"
+serde = "*"
+serde_json = "*"
+serde_macros = "*"
