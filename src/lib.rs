@@ -1,8 +1,8 @@
-/*
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-*/
+//
 
 #![feature(custom_derive, custom_attribute, plugin)]
 #![plugin(serde_macros)]
@@ -52,12 +52,11 @@ pub struct Threat {
     pub references: Vec<String>,
 
     #[serde(default)]
-    pub tags: Vec<String>
+    pub tags: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Default, Debug, PartialEq)]
 pub struct Threats {
-
     #[serde(default)]
     pub count: u64,
 
@@ -68,8 +67,7 @@ pub struct Threats {
     pub previous: Option<String>,
 
     #[serde(default)]
-    pub results: Vec<Threat>
-
+    pub results: Vec<Threat>,
 }
 
 pub struct Client {
@@ -77,7 +75,7 @@ pub struct Client {
     client: hyper::Client,
     limit: Option<usize>,
     since: Option<time::Tm>,
-    exchange: Option<String>
+    exchange: Option<String>,
 }
 
 impl Default for Client {
@@ -87,13 +85,12 @@ impl Default for Client {
             since: Some(time::empty_tm()),
             exchange: Some(String::from(OTX_DEFAULT_EXCHANGE)),
             client: hyper::Client::new(),
-            apikey: None
+            apikey: None,
         }
     }
 }
 
 impl Client {
-
     pub fn new() -> Client {
         Default::default()
     }
@@ -136,7 +133,7 @@ impl Client {
         match self.client.get(url).header(authorization).send() {
             Ok(mut r) => {
                 if r.status != hyper::status::StatusCode::Ok {
-                    return None
+                    return None;
                 }
                 let mut body = String::new();
                 r.read_to_string(&mut body).unwrap();
@@ -144,12 +141,10 @@ impl Client {
                 let result: Result<Threats, serde_json::error::Error> = serde_json::from_str(data);
                 match result {
                     Ok(ts) => Some(ts),
-                    Err(_) => None
+                    Err(_) => None,
                 }
-            },
-            Err(_) => {
-                None
             }
+            Err(_) => None,
         }
     }
 
@@ -161,27 +156,29 @@ impl Client {
         let authorization = OtxApiKey(apikey.clone());
         match self.client.get(url).header(authorization).send() {
             Ok(mut r) => {
-              let mut body = String::new();
-              r.read_to_string(&mut body).unwrap();
-              let data = &body[..];
-              let val: Result<Threat, serde_json::error::Error> = serde_json::from_str(data);
-              match val {
-                  Ok(t) => Some(t),
-                  Err(_) => None
-              }
-            },
-            Err(_) => None
+                let mut body = String::new();
+                r.read_to_string(&mut body).unwrap();
+                let data = &body[..];
+                let val: Result<Threat, serde_json::error::Error> = serde_json::from_str(data);
+                match val {
+                    Ok(t) => Some(t),
+                    Err(_) => None,
+                }
+            }
+            Err(_) => None,
         }
     }
 
-    pub fn each<F>(&self, mut f: F) where F: FnMut(&Threat) -> bool {
+    pub fn each<F>(&self, mut f: F)
+        where F: FnMut(&Threat) -> bool
+    {
 
         let mut pg: Option<String> = None;
         loop {
 
             let threats = self.threats(pg).unwrap();
-            for threat in threats.results.iter(){
-                if ! f(threat) {
+            for threat in threats.results.iter() {
+                if !f(threat) {
                     return;
                 }
             }
@@ -200,7 +197,7 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_threats(){
+    fn test_threats() {
         let key = &(env::var("OTX_API_KEY").expect("Please set OTX_API_KEY envvar"))[..];
         let mut otx = Client::new();
         let otx = otx.apikey(key).limit(2);
@@ -210,7 +207,7 @@ mod test {
     }
 
     #[test]
-    fn test_threats_since(){
+    fn test_threats_since() {
         let key = &(env::var("OTX_API_KEY").expect("Please set OTX_API_KEY envvar"))[..];
         let now = time::now();
         let then = now.sub(time::Duration::days(1));
@@ -224,12 +221,15 @@ mod test {
     }
 
     #[test]
-    fn test_each(){
+    fn test_each() {
         let key = &(env::var("OTX_API_KEY").expect("Please set OTX_API_KEY envvar"))[..];
         let mut otx = Client::new();
         let otx = otx.apikey(key).limit(2);
         let mut count = 5;
-        otx.each(|_|{ count -= 1; count > 0 });
+        otx.each(|_| {
+            count -= 1;
+            count > 0
+        });
         assert!(count == 0);
     }
 }
