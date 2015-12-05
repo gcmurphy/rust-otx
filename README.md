@@ -12,12 +12,10 @@ and get an API key in order to use this library.
 ##### TODO
   - Get code to run on stable instead of just nightly.
   - Write some documentation.
-  - Write some proper unittests.
-  - Move existing tests into tests directory, as they are more
-    integration tests.
   - Figure out how to replace .each(|x|) with a nicer more
     idiomatic Rust iterator.
   - Add travis-ci.org integration.
+  - Pin to specific library versions
   - Cut an official release and get it published as a crate.
 
 
