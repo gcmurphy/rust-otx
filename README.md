@@ -1,4 +1,6 @@
 ## otx - Open threat exchange client
+[![Build
+Status](https://travis-ci.org/gcmurphy/rust-otx.svg)](https://travis-ci.org/gcmurphy/rust-otx)
 
 Rust bindings for the [AlienVault](
 ://www.alienvault.com/open-threat-exchange) OTX v1 API.
@@ -11,10 +13,8 @@ and get an API key in order to use this library.
 
 ##### TODO
   - Get code to run on stable instead of just nightly.
-  - Write some documentation.
   - Figure out how to replace .each(|x|) with a nicer more
     idiomatic Rust iterator.
-  - Add travis-ci.org integration.
   - Pin to specific library versions
   - Cut an official release and get it published as a crate.
 
